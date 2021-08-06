@@ -1,0 +1,4 @@
+[profile common]
+source_profile=id
+
+[profile id]

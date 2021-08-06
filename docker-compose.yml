@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  awscli:
+    build:
+      dockerfile: Dockerfile
+      args:
+        AL2_VERSION: ${AL2_VERSION}
+        AWS_CLI_VERSION: ${AWS_CLI_VERSION}
+        AWS_VAULT_VERSION: ${AWS_VAULT_VERSION}
+    image: awscli:test
+    container_name: compose-awscli
+    entrypoint: sh
+    tty: true
+  inspec:
+    image: "chef/inspec"
+    container_name: compose-inspec
+    volumes:
+      - type: bind
+        source: ./
+        target: /workdir
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    working_dir: /workdir
+    depends_on:
+      - "compose-awscli"
+    entrypoint: inspec exec test/default -t docker://compose-awscli --input awscli_version=${AWS_CLI_VERSION}  awsvault_version=${AWS_VAULT_VERSION} --chef-license accept-silent
