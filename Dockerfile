@@ -6,7 +6,7 @@ ARG AWS_CLI_VERSION
 ARG AWS_VAULT_VERSION
 
 RUN yum update -y && \
-    yum install -y unzip less && \
+    yum install -y unzip git less && \
     yum clean all && \
     rm -rf /var/cache/yum
 
